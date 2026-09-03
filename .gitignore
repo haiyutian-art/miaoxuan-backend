@@ -1,0 +1,17 @@
+target/
+.idea/
+*.iml
+*.log
+.classpath
+.project
+.settings/
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+
+# 环境变量
+.env
+.env.*
+!.env.example

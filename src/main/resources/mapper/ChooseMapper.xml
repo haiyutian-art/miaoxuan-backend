@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jf.mapper.ChooseMapper">
+    <resultMap id="BaseResultMap" type="com.jf.pojo.Choose">
+        <id column="choose_id" jdbcType="INTEGER" property="chooseId"/>
+        <result column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="student_id" jdbcType="INTEGER" property="studentId"/>
+        <result column="usual_grade" jdbcType="REAL" property="usualGrade"/>
+        <result column="exam_grade" jdbcType="REAL" property="examGrade"/>
+        <result column="all_grade" jdbcType="REAL" property="allGrade"/>
+        <result column="my_term" jdbcType="VARCHAR" property="myTerm"/>
+        <result column="first_datetime" jdbcType="TIMESTAMP" property="firstDatetime"/>
+        <result column="last_datetime" jdbcType="TIMESTAMP" property="lastDatetime"/>
+    </resultMap>
+    
+    <resultMap id="ChooseGradeMap" type="com.jf.pojo.viewpojo.ChooseGrade">
+        <id column="choose_id" jdbcType="INTEGER" property="chooseId"/>
+        <result column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="student_id" jdbcType="INTEGER" property="studentId"/>
+        <result column="student_no" jdbcType="VARCHAR" property="studentNo"/>
+        <result column="student_name" jdbcType="VARCHAR" property="studentName"/>
+        <result column="major_name" jdbcType="VARCHAR" property="majorName"/>
+        <result column="course_name" jdbcType="VARCHAR" property="courseName"/>
+        <result column="usual_grade" jdbcType="REAL" property="usualGrade"/>
+        <result column="exam_grade" jdbcType="REAL" property="examGrade"/>
+        <result column="all_grade" jdbcType="REAL" property="allGrade"/>
+    </resultMap>
+    
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            choose_id,
+            course_id,
+            student_id,
+            usual_grade,
+            exam_grade,
+            all_grade,
+            my_term,
+            first_datetime,
+            last_datetime
+        FROM
+            choose
+        WHERE
+            choose_id = #{chooseId,jdbcType=INTEGER}
+    </select>
+    
+    <insert id="chooseCourse" parameterType="com.jf.pojo.Choose">
+        INSERT INTO choose (
+            course_id,
+            student_id,
+            my_term,
+            first_datetime,
+            last_datetime
+        )
+        VALUES (
+            #{courseId,jdbcType=INTEGER},
+            #{studentId,jdbcType=INTEGER},
+            #{myTerm,jdbcType=VARCHAR},
+            #{firstDatetime,jdbcType=TIMESTAMP},
+            #{lastDatetime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    
+    <select id="selectByStudentId" resultMap="BaseResultMap">
+        SELECT
+            choose_id,
+            course_id,
+            student_id,
+            usual_grade,
+            exam_grade,
+            all_grade,
+            my_term,
+            first_datetime,
+            last_datetime
+        FROM
+            choose
+        WHERE
+            student_id = #{studentId,jdbcType=INTEGER}
+            AND my_term = #{term,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="selectByCourseIdAndStudentId" resultMap="BaseResultMap">
+        SELECT
+            choose_id,
+            course_id,
+            student_id,
+            usual_grade,
+            exam_grade,
+            all_grade,
+            my_term,
+            first_datetime,
+            last_datetime
+        FROM
+            choose
+        WHERE
+            course_id = #{courseId,jdbcType=INTEGER}
+            AND student_id = #{studentId,jdbcType=INTEGER}
+    </select>
+    
+    <delete id="deleteByCourseIdAndStudentId">
+        DELETE FROM
+            choose
+        WHERE
+            course_id = #{courseId,jdbcType=INTEGER}
+            AND student_id = #{studentId,jdbcType=INTEGER}
+    </delete>
+    
+    <select id="selectByCourseId" resultMap="BaseResultMap">
+        SELECT
+            choose_id,
+            course_id,
+            student_id,
+            usual_grade,
+            exam_grade,
+            all_grade,
+            my_term,
+            first_datetime,
+            last_datetime
+        FROM
+            choose
+        WHERE
+            course_id = #{courseId,jdbcType=INTEGER}
+    </select>
+    
+    <update id="updateGradeByChooseId">
+        UPDATE choose
+        SET
+            usual_grade = #{usualGrade,jdbcType=REAL},
+            exam_grade = #{examGrade,jdbcType=REAL},
+            all_grade = #{allGrade,jdbcType=REAL},
+            last_datetime = #{lastDatetime,jdbcType=TIMESTAMP}
+        WHERE
+            choose_id = #{chooseId,jdbcType=INTEGER}
+    </update>
+    
+    <select id="getStudentsGradeList" resultMap="ChooseGradeMap">
+        SELECT
+            ch.choose_id,
+            ch.course_id,
+            ch.student_id,
+            s.student_no,
+            s.student_name,
+            m.major_name,
+            c.course_name,
+            ch.usual_grade,
+            ch.exam_grade,
+            ch.all_grade
+        FROM
+            choose ch
+            JOIN student s ON ch.student_id = s.student_id
+            JOIN course c ON ch.course_id = c.course_id
+            LEFT JOIN major m ON s.student_major = m.major_id
+        WHERE
+            ch.course_id = #{courseId,jdbcType=INTEGER}
+    </select>
+    
+    <update id="updateByPrimaryKeySelective" parameterType="com.jf.pojo.Choose">
+        UPDATE choose
+        <set>
+            <if test="courseId != null">
+                course_id = #{courseId,jdbcType=INTEGER},
+            </if>
+            <if test="studentId != null">
+                student_id = #{studentId,jdbcType=INTEGER},
+            </if>
+            <if test="usualGrade != null">
+                usual_grade = #{usualGrade,jdbcType=REAL},
+            </if>
+            <if test="examGrade != null">
+                exam_grade = #{examGrade,jdbcType=REAL},
+            </if>
+            <if test="allGrade != null">
+                all_grade = #{allGrade,jdbcType=REAL},
+            </if>
+            <if test="myTerm != null">
+                my_term = #{myTerm,jdbcType=VARCHAR},
+            </if>
+            <if test="firstDatetime != null">
+                first_datetime = #{firstDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastDatetime != null">
+                last_datetime = #{lastDatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE
+            choose_id = #{chooseId,jdbcType=INTEGER}
+    </update>
+    
+    <!-- 其他方法的SQL映射... -->
+</mapper> 
