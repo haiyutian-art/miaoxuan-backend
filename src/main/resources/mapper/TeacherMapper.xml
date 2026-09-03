@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jf.mapper.TeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.jf.pojo.Teacher" >
+    <id column="teacher_id" property="teacherId" jdbcType="INTEGER" />
+    <result column="teacher_no" property="teacherNo" jdbcType="VARCHAR" />
+    <result column="teacher_name" property="teacherName" jdbcType="VARCHAR" />
+    <result column="teacher_sex" property="teacherSex" jdbcType="VARCHAR" />
+    <result column="teacher_password" property="teacherPassword" jdbcType="VARCHAR" />
+    <result column="teacher_phone" property="teacherPhone" jdbcType="VARCHAR" />
+    <result column="teacher_email" property="teacherEmail" jdbcType="VARCHAR" />
+    <result column="teacher_role" property="teacherRole" jdbcType="VARCHAR" />
+    <result column="major_id" property="majorId" jdbcType="INTEGER" />
+    <result column="first_datetime" property="firstDatetime" jdbcType="TIMESTAMP" />
+    <result column="last_datetime" property="lastDatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    teacher_id, teacher_no, teacher_name, teacher_sex, teacher_password, teacher_phone, 
+    teacher_email, teacher_role, major_id, first_datetime, last_datetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from teacher
+    where teacher_id = #{teacherId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from teacher
+    where teacher_id = #{teacherId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jf.pojo.Teacher" >
+    insert into teacher (teacher_id, teacher_no, teacher_name, 
+      teacher_sex, teacher_password, teacher_phone, 
+      teacher_email, teacher_role, major_id, 
+      first_datetime, last_datetime)
+    values (#{teacherId,jdbcType=INTEGER}, #{teacherNo,jdbcType=VARCHAR}, #{teacherName,jdbcType=VARCHAR}, 
+      #{teacherSex,jdbcType=VARCHAR}, #{teacherPassword,jdbcType=VARCHAR}, #{teacherPhone,jdbcType=VARCHAR}, 
+      #{teacherEmail,jdbcType=VARCHAR}, #{teacherRole,jdbcType=VARCHAR}, #{majorId,jdbcType=INTEGER}, 
+      #{firstDatetime,jdbcType=TIMESTAMP}, #{lastDatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jf.pojo.Teacher" >
+    insert into teacher
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="teacherId != null" >
+        teacher_id,
+      </if>
+      <if test="teacherNo != null" >
+        teacher_no,
+      </if>
+      <if test="teacherName != null" >
+        teacher_name,
+      </if>
+      <if test="teacherSex != null" >
+        teacher_sex,
+      </if>
+      <if test="teacherPassword != null" >
+        teacher_password,
+      </if>
+      <if test="teacherPhone != null" >
+        teacher_phone,
+      </if>
+      <if test="teacherEmail != null" >
+        teacher_email,
+      </if>
+      <if test="teacherRole != null" >
+        teacher_role,
+      </if>
+      <if test="majorId != null" >
+        major_id,
+      </if>
+      <if test="firstDatetime != null" >
+        first_datetime,
+      </if>
+      <if test="lastDatetime != null" >
+        last_datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="teacherId != null" >
+        #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="teacherNo != null" >
+        #{teacherNo,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherName != null" >
+        #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherSex != null" >
+        #{teacherSex,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherPassword != null" >
+        #{teacherPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherPhone != null" >
+        #{teacherPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherEmail != null" >
+        #{teacherEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherRole != null" >
+        #{teacherRole,jdbcType=VARCHAR},
+      </if>
+      <if test="majorId != null" >
+        #{majorId,jdbcType=INTEGER},
+      </if>
+      <if test="firstDatetime != null" >
+        #{firstDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastDatetime != null" >
+        #{lastDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jf.pojo.Teacher" >
+    update teacher
+    <set >
+      <if test="teacherNo != null" >
+        teacher_no = #{teacherNo,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherName != null" >
+        teacher_name = #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherSex != null" >
+        teacher_sex = #{teacherSex,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherPassword != null" >
+        teacher_password = #{teacherPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherPhone != null" >
+        teacher_phone = #{teacherPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherEmail != null" >
+        teacher_email = #{teacherEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherRole != null" >
+        teacher_role = #{teacherRole,jdbcType=VARCHAR},
+      </if>
+      <if test="majorId != null" >
+        major_id = #{majorId,jdbcType=INTEGER},
+      </if>
+      <if test="firstDatetime != null" >
+        first_datetime = #{firstDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastDatetime != null" >
+        last_datetime = #{lastDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where teacher_id = #{teacherId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jf.pojo.Teacher" >
+    update teacher
+    set teacher_no = #{teacherNo,jdbcType=VARCHAR},
+      teacher_name = #{teacherName,jdbcType=VARCHAR},
+      teacher_sex = #{teacherSex,jdbcType=VARCHAR},
+      teacher_password = #{teacherPassword,jdbcType=VARCHAR},
+      teacher_phone = #{teacherPhone,jdbcType=VARCHAR},
+      teacher_email = #{teacherEmail,jdbcType=VARCHAR},
+      teacher_role = #{teacherRole,jdbcType=VARCHAR},
+      major_id = #{majorId,jdbcType=INTEGER},
+      first_datetime = #{firstDatetime,jdbcType=TIMESTAMP},
+      last_datetime = #{lastDatetime,jdbcType=TIMESTAMP}
+    where teacher_id = #{teacherId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByTeacherNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from teacher
+    where teacher_no = #{teacherNo}
+  </select>
+
+  <select id="selectPasswordByTeacherId" resultType="string" parameterType="java.lang.Integer" >
+    select
+    teacher_password
+    from teacher
+    where teacher_id = #{teacherId}
+  </select>
+
+  <update id="updatePassword">
+    update teacher
+    set teacher_password = #{password}
+    where teacher_no = #{teacherNo}
+  </update>
+
+  <update id="updatePasswordByTeacherNo">
+    update teacher
+    set teacher_password = #{password},
+      last_datetime = #{updateTime}
+    where teacher_no = #{teacherNo}
+  </update>
+
+  <select id="selectByUserNoAndEmail" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from teacher
+    where teacher_no = #{teacherNo} and teacher_email = #{teacherEmail}
+  </select>
+</mapper> 

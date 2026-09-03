@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jf.mapper.AdminMapper" >
+  <resultMap id="BaseResultMap" type="com.jf.pojo.Admin" >
+    <id column="admin_id" property="adminId" jdbcType="INTEGER" />
+    <result column="admin_no" property="adminNo" jdbcType="VARCHAR" />
+    <result column="admin_password" property="adminPassword" jdbcType="VARCHAR" />
+    <result column="admin_name" property="adminName" jdbcType="VARCHAR" />
+    <result column="admin_phone" property="adminPhone" jdbcType="VARCHAR" />
+    <result column="admin_email" property="adminEmail" jdbcType="VARCHAR" />
+    <result column="admin_role" property="adminRole" jdbcType="VARCHAR" />
+    <result column="first_datetime" property="firstDatetime" jdbcType="TIMESTAMP" />
+    <result column="last_datetime" property="lastDatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    admin_id, admin_no, admin_password, admin_name, admin_phone, admin_email, admin_role, 
+    first_datetime, last_datetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from admin
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from admin
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jf.pojo.Admin" >
+    insert into admin (admin_id, admin_no, admin_password, 
+      admin_name, admin_phone, admin_email, 
+      admin_role, first_datetime, last_datetime
+      )
+    values (#{adminId,jdbcType=INTEGER}, #{adminNo,jdbcType=VARCHAR}, #{adminPassword,jdbcType=VARCHAR}, 
+      #{adminName,jdbcType=VARCHAR}, #{adminPhone,jdbcType=VARCHAR}, #{adminEmail,jdbcType=VARCHAR}, 
+      #{adminRole,jdbcType=VARCHAR}, #{firstDatetime,jdbcType=TIMESTAMP}, #{lastDatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jf.pojo.Admin" >
+    insert into admin
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="adminNo != null" >
+        admin_no,
+      </if>
+      <if test="adminPassword != null" >
+        admin_password,
+      </if>
+      <if test="adminName != null" >
+        admin_name,
+      </if>
+      <if test="adminPhone != null" >
+        admin_phone,
+      </if>
+      <if test="adminEmail != null" >
+        admin_email,
+      </if>
+      <if test="adminRole != null" >
+        admin_role,
+      </if>
+      <if test="firstDatetime != null" >
+        first_datetime,
+      </if>
+      <if test="lastDatetime != null" >
+        last_datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adminId != null" >
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="adminNo != null" >
+        #{adminNo,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPassword != null" >
+        #{adminPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="adminName != null" >
+        #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPhone != null" >
+        #{adminPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="adminEmail != null" >
+        #{adminEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="adminRole != null" >
+        #{adminRole,jdbcType=VARCHAR},
+      </if>
+      <if test="firstDatetime != null" >
+        #{firstDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastDatetime != null" >
+        #{lastDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jf.pojo.Admin" >
+    update admin
+    <set >
+      <if test="adminNo != null" >
+        admin_no = #{adminNo,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPassword != null" >
+        admin_password = #{adminPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="adminName != null" >
+        admin_name = #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPhone != null" >
+        admin_phone = #{adminPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="adminEmail != null" >
+        admin_email = #{adminEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="adminRole != null" >
+        admin_role = #{adminRole,jdbcType=VARCHAR},
+      </if>
+      <if test="firstDatetime != null" >
+        first_datetime = #{firstDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastDatetime != null" >
+        last_datetime = #{lastDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jf.pojo.Admin" >
+    update admin
+    set admin_no = #{adminNo,jdbcType=VARCHAR},
+      admin_password = #{adminPassword,jdbcType=VARCHAR},
+      admin_name = #{adminName,jdbcType=VARCHAR},
+      admin_phone = #{adminPhone,jdbcType=VARCHAR},
+      admin_email = #{adminEmail,jdbcType=VARCHAR},
+      admin_role = #{adminRole,jdbcType=VARCHAR},
+      first_datetime = #{firstDatetime,jdbcType=TIMESTAMP},
+      last_datetime = #{lastDatetime,jdbcType=TIMESTAMP}
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByAdminNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from admin
+    where admin_no = #{adminNo}
+  </select>
+</mapper> 

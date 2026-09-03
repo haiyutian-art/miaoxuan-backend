@@ -1,0 +1,171 @@
+server:
+  port: 8080
+  address: 0.0.0.0
+  servlet:
+    context-path: /
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/online_student_choose_system?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&connectTimeout=60000&socketTimeout=60000
+    username: uniapp
+    password: 558265864
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: true
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      validation-query-timeout: 10000
+      keep-alive: true
+      # 增加重试配置
+      connection-error-retry-attempts: 3
+      break-after-acquire-failure: false
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        reset-enable: false
+        login-username: admin
+        login-password: admin
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    timeout: 1800000
+    # password: 不需要密码
+    lettuce:
+      pool:
+        max-active: 20
+        max-wait: -1
+        max-idle: 5
+        min-idle: 0
+      shutdown-timeout: 100ms
+    # Redis Sentinel配置（云服务器部署时使用）
+    #sentinel:
+    #  master: mymaster
+    #  nodes: localhost:26379
+  
+  # 配置Session存储在Redis中
+  session:
+    store-type: redis
+    timeout: 1800
+    
+  mail:
+    host: smtp.qq.com
+    username: 1932904182@qq.com
+    password: ghmdarzauqmxceab
+    properties:
+      mail:
+        smtp:
+          auth: true
+  
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+# Dubbo配置
+dubbo:
+  application:
+    name: uniapp-course-backend
+    qos-enable: false
+    register-mode: instance
+  registry:
+    id: primaryRegistryConfig
+    address: zookeeper://localhost:2181
+    timeout: 60000
+    check: false
+    simplified: true
+    use-as-config-center: false
+    use-as-metadata-center: false
+  config-center:
+    check: false
+    address: zookeeper://localhost:2181
+  metadata-report:
+    id: primaryMetadataReportConfig
+    address: zookeeper://localhost:2181
+  protocol:
+    name: dubbo
+    port: 20880
+  provider:
+    timeout: 60000
+    retries: 0
+    delay: -1
+  consumer:
+    timeout: 60000
+    check: false
+    validation: false
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.jf.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+    cache-enabled: true
+    default-statement-timeout: 60
+    default-fetch-size: 100
+    local-cache-scope: session
+    default-executor-type: reuse
+
+# 分页配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+logging:
+  level:
+    com.jf.mapper: debug
+    org.springframework: warn
+    com.jf: debug 
+    org.apache.dubbo: info
+    org.apache.zookeeper: warn
+  # 适配不同环境的日志配置
+  file:
+    name: ${user.home}/logs/uniapp-course-backend/application.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 30
+
+# SpringDoc 配置
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    operations-sorter: method
+    tags-sorter: alpha
+  packages-to-scan: com.jf.controller
+  show-actuator: true 

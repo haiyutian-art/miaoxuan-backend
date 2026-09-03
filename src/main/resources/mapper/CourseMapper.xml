@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jf.mapper.CourseMapper">
+    <resultMap id="BaseResultMap" type="com.jf.pojo.Course">
+        <id column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="course_name" jdbcType="VARCHAR" property="courseName"/>
+        <result column="course_picture" jdbcType="VARCHAR" property="coursePicture"/>
+        <result column="major_id" jdbcType="INTEGER" property="majorId"/>
+        <result column="teacher_id" jdbcType="INTEGER" property="teacherId"/>
+        <result column="course_type" jdbcType="VARCHAR" property="courseType"/>
+        <result column="course_score" jdbcType="REAL" property="courseScore"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="term" jdbcType="VARCHAR" property="term"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="first_datetime" jdbcType="TIMESTAMP" property="firstDatetime"/>
+        <result column="last_datetime" jdbcType="TIMESTAMP" property="lastDatetime"/>
+    </resultMap>
+    
+    <resultMap id="CourseViewMap" type="com.jf.pojo.viewpojo.CourseView">
+        <id column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="course_name" jdbcType="VARCHAR" property="courseName"/>
+        <result column="course_picture" jdbcType="VARCHAR" property="coursePicture"/>
+        <result column="major_id" jdbcType="INTEGER" property="majorId"/>
+        <result column="teacher_id" jdbcType="INTEGER" property="teacherId"/>
+        <result column="teacher_name" jdbcType="VARCHAR" property="teacherName"/>
+        <result column="course_type" jdbcType="VARCHAR" property="courseType"/>
+        <result column="course_score" jdbcType="REAL" property="courseScore"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="term" jdbcType="VARCHAR" property="term"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="major_name" jdbcType="VARCHAR" property="majorName"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+    </resultMap>
+    
+    <resultMap id="StudentCourseViewMap" type="com.jf.pojo.viewpojo.StudentCourseView">
+        <id column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="course_name" jdbcType="VARCHAR" property="courseName"/>
+        <result column="course_picture" jdbcType="VARCHAR" property="coursePicture"/>
+        <result column="teacher_id" jdbcType="INTEGER" property="teacherId"/>
+        <result column="teacher_name" jdbcType="VARCHAR" property="teacherName"/>
+        <result column="course_type" jdbcType="VARCHAR" property="courseType"/>
+        <result column="course_score" jdbcType="REAL" property="courseScore"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="term" jdbcType="VARCHAR" property="term"/>
+        <result column="usual_grade" jdbcType="REAL" property="usualGrade"/>
+        <result column="exam_grade" jdbcType="REAL" property="examGrade"/>
+        <result column="all_grade" jdbcType="REAL" property="allGrade"/>
+        <result column="choose_id" jdbcType="INTEGER" property="chooseId"/>
+    </resultMap>
+    
+    <!-- 初始化课程视图查询 -->
+    <select id="initCourseView" resultMap="CourseViewMap">
+        SELECT
+            c.course_id,
+            c.course_name,
+            c.course_picture,
+            c.major_id,
+            c.teacher_id,
+            t.teacher_name,
+            c.course_type,
+            c.course_score,
+            c.stock,
+            c.address,
+            c.term,
+            c.number,
+            c.description,
+            m.major_name,
+            '0' as status
+        FROM
+            course c
+            LEFT JOIN teacher t ON c.teacher_id = t.teacher_id
+            LEFT JOIN major m ON c.major_id = m.major_id
+    </select>
+    
+    <!-- 根据学期获取课程视图列表 -->
+    <select id="getCourseView" resultMap="CourseViewMap">
+        SELECT
+            c.course_id,
+            c.course_name,
+            c.course_picture,
+            c.major_id,
+            c.teacher_id,
+            t.teacher_name,
+            c.course_type,
+            c.course_score,
+            c.stock,
+            c.address,
+            c.term,
+            c.number,
+            c.description,
+            m.major_name,
+            CASE
+                WHEN ch.course_id IS NULL THEN '0'
+                ELSE '1'
+            END AS status
+        FROM
+            course c
+            LEFT JOIN teacher t ON c.teacher_id = t.teacher_id
+            LEFT JOIN major m ON c.major_id = m.major_id
+            LEFT JOIN (
+                SELECT
+                    course_id
+                FROM
+                    choose
+                WHERE
+                    student_id = #{studentId}
+                    AND my_term = #{term}
+            ) ch ON c.course_id = ch.course_id
+        WHERE
+            c.term = #{term}
+    </select>
+    
+    <!-- 根据类型获取课程视图列表 -->
+    <select id="getCourseViewByType" resultMap="CourseViewMap">
+        SELECT
+            c.course_id,
+            c.course_name,
+            c.course_picture,
+            c.major_id,
+            c.teacher_id,
+            t.teacher_name,
+            c.course_type,
+            c.course_score,
+            c.stock,
+            c.address,
+            c.term,
+            c.number,
+            c.description,
+            m.major_name,
+            CASE
+                WHEN ch.course_id IS NULL THEN '0'
+                ELSE '1'
+            END AS status
+        FROM
+            course c
+            LEFT JOIN teacher t ON c.teacher_id = t.teacher_id
+            LEFT JOIN major m ON c.major_id = m.major_id
+            LEFT JOIN (
+                SELECT
+                    course_id
+                FROM
+                    choose
+                WHERE
+                    student_id = #{studentId}
+                    AND my_term = #{term}
+            ) ch ON c.course_id = ch.course_id
+        WHERE
+            c.term = #{term}
+            AND c.course_type = #{type}
+    </select>
+    
+    <!-- 根据学生ID获取已选课程列表 -->
+    <select id="getMyCourse" resultMap="StudentCourseViewMap">
+        SELECT
+            c.course_id,
+            c.course_name,
+            c.course_picture,
+            c.teacher_id,
+            t.teacher_name,
+            c.course_type,
+            c.course_score,
+            c.address,
+            c.term,
+            ch.usual_grade,
+            ch.exam_grade,
+            ch.all_grade,
+            ch.choose_id
+        FROM
+            course c
+            LEFT JOIN teacher t ON c.teacher_id = t.teacher_id
+            JOIN choose ch ON c.course_id = ch.course_id
+        WHERE
+            ch.student_id = #{studentId}
+            AND ch.my_term = #{term}
+    </select>
+    
+    <!-- 根据教师ID获取课程列表 -->
+    <select id="getCourseByTeacherId" resultMap="CourseViewMap">
+        SELECT
+            c.course_id,
+            c.course_name,
+            c.course_picture,
+            c.major_id,
+            c.teacher_id,
+            t.teacher_name,
+            c.course_type,
+            c.course_score,
+            c.stock,
+            c.address,
+            c.term,
+            c.number,
+            c.description,
+            m.major_name,
+            '0' as status
+        FROM
+            course c
+            LEFT JOIN teacher t ON c.teacher_id = t.teacher_id
+            LEFT JOIN major m ON c.major_id = m.major_id
+        WHERE
+            c.teacher_id = #{teacherId}
+            AND c.term = #{term}
+    </select>
+    
+    <!-- 更新课程人数（选课时） -->
+    <update id="UpdateCourseToChooseCourse">
+        UPDATE course
+        SET number = number + 1,
+            stock = stock - 1,
+            last_datetime = #{lastDatetime,jdbcType=TIMESTAMP}
+        WHERE
+            course_id = #{courseId}
+            AND stock > 0
+    </update>
+    
+    <!-- 更新课程人数（退课时） -->
+    <update id="UpdateCourseToDeleteCourse">
+        UPDATE course
+        SET number = number - 1,
+            stock = stock + 1,
+            last_datetime = #{lastDatetime,jdbcType=TIMESTAMP}
+        WHERE
+            course_id = #{courseId}
+            AND number > 0
+    </update>
+    
+    <!-- 其他方法的SQL映射... -->
+</mapper> 
