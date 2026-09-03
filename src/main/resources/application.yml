@@ -5,12 +5,14 @@ server:
     context-path: /
 
 spring:
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/online_student_choose_system?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&connectTimeout=60000&socketTimeout=60000
-    username: uniapp
-    password: 558265864
+    url: '${DB_URL:jdbc:mysql://localhost:3306/online_student_choose_system?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&connectTimeout=60000&socketTimeout=60000}'
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     druid:
       initial-size: 5
       min-idle: 5
@@ -39,8 +41,8 @@ spring:
         enabled: true
         url-pattern: /druid/*
         reset-enable: false
-        login-username: admin
-        login-password: admin
+        login-username: ${DRUID_USERNAME:admin}
+        login-password: ${DRUID_PASSWORD:admin}
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
@@ -51,11 +53,11 @@ spring:
         format_sql: true
         use_sql_comments: true
   redis:
-    host: localhost
-    port: 6379
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
     database: 0
     timeout: 1800000
-    # password: 不需要密码
+    password: ${REDIS_PASSWORD:}
     lettuce:
       pool:
         max-active: 20
@@ -74,9 +76,9 @@ spring:
     timeout: 1800
     
   mail:
-    host: smtp.qq.com
-    username: 1932904182@qq.com
-    password: ghmdarzauqmxceab
+    host: ${MAIL_HOST:smtp.qq.com}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
